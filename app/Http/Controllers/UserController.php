@@ -39,7 +39,7 @@ class UserController extends Controller
       $data = request()->validate([
         'name' => 'required',
         'email' => ['required', 'email', 'unique:users,email'],
-        'password' => ['required', 'min:6],
+        'password' => ['required', 'min:6'],
 
       ], [
         'name.required' => 'El campo nombre es obligatorio',
@@ -48,12 +48,6 @@ class UserController extends Controller
 
       ]);
 
-      //
-      // if (empty($data['name'])) {
-      //   return redirect('usuarios/nuevo')->withErrors([
-      //     'name' => 'El campo nombre es obligatorio'
-      //   ]);
-      // }
 
 
       User::create([
@@ -65,4 +59,12 @@ class UserController extends Controller
         return redirect()->route('users.index');
         //return 'Procesando información...';
     }
+
+    public function edit(User $user)
+    {
+      return view('users.edit', ['user' => $user]);
+
+    }
+
+
 }
