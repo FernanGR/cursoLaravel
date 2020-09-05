@@ -202,6 +202,26 @@ class UsersModuleTest extends TestCase
             });
      }
 
+     /** @test */
+     function it_update_a_user()
+     {
 
+       $user = factory(User::class)->create();
+
+       $this->withoutExceptionHandling();
+
+         $this->put("/usuarios/{$user->id}", [
+           'name' => 'Duilio',
+           'email' => 'duilio@styde.net',
+           'password' => '123456'
+         ])->assertRedirect("/usuarios/{$user->id}");
+
+         $this->assertCredentials([
+           'name' => 'Duilio',
+           'email' => 'duilio@styde.net',
+           'password' => '123456',
+         ]);
+
+      }
 
 }
