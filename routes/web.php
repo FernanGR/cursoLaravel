@@ -20,3 +20,5 @@ Route::post('/usuarios', 'UserController@store');
 Route::put('/usuarios/{user}', 'UserController@update');
 
 Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController');
+
+Route::delete('/usuarios/{user}', 'UserController@destroy');

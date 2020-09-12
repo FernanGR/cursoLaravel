@@ -270,7 +270,7 @@ class UsersModuleTest extends TestCase
               function the_email_must_be_unique_when_updating_the_user()
               {
 
-                
+
 
                 factory(User::class)->create([
                   'email' => 'existing-email@example.com',
@@ -294,6 +294,34 @@ class UsersModuleTest extends TestCase
 
               }
 
+
+
+
+              /** @test */
+              function the_users_email_can_stay_the_same_when_updating_the_user()
+              {
+
+                $user = factory(User::class)->create([
+                    'email' => 'duilio@styde.net'
+                ]);
+
+
+                    $this->from("usuarios/{$user->id}/editar")
+                    ->put("usuarios/{$user->id}", [
+                      'name' => 'Duilio Palacios',
+                      'email' => 'duilio@styde.net',
+                      'password' => '12345678'
+                  ])
+                    ->assertRedirect("usuarios/{$user->id}"); //(users.show)
+
+
+
+                    $this->assertDatabaseHas('users',[
+                        'name' => 'Duilio Palacios',
+                        'email' => 'duilio@styde.net',
+                     ]);
+
+              }
 
               /** @test */
               function the_password_is_optional_when_updating_the_user()
@@ -324,31 +352,21 @@ class UsersModuleTest extends TestCase
               }
 
 
+
               /** @test */
-              function the_users_email_can_stay_the_same_when_updating_the_user()
+              function it_deletes_a_user()
               {
 
-                $user = factory(User::class)->create([
-                    'email' => 'duilio@styde.net'
-                ]);
+                  $user = factory(User::class)->create();
 
+                  $this->delete("usuarios/{$user->id}")
+                    ->assertRedirect("usuarios");
 
-                    $this->from("usuarios/{$user->id}/editar")
-                    ->put("usuarios/{$user->id}", [
-                      'name' => 'Duilio Palacios',
-                      'email' => 'duilio@styde.net',
-                      'password' => '12345678'
-                  ])
-                    ->assertRedirect("usuarios/{$user->id}"); //(users.show)
+                  $this->assertDatabaseMissing('users',[
+                      'id' => $user->id
+                  ]);
 
-
-
-                    $this->assertDatabaseHas('users',[
-                        'name' => 'Duilio Palacios',
-                        'email' => 'duilio@styde.net',
-                     ]);
 
               }
-
 
 }
